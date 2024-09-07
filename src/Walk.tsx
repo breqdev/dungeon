@@ -150,6 +150,9 @@ export default function Walk({
             }
           }}
         />
+        <p className="absolute bottom-0 left-0 right-0 text-center text-white p-1 text-lg italic">
+          click and drag to move
+        </p>
       </div>
     </div>
   );
