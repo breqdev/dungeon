@@ -159,6 +159,13 @@ export default function App() {
             note: these experiences load arbitrary websites as iframes, and may
             autoplay music, lag your computer, or otherwise annoy you.
           </p>
+          <p>
+            this website is{" "}
+            <a href="https://github.com/breqdev/dungeon" className="underline">
+              open source
+            </a>
+            , and pull requests are welcome.
+          </p>
         </div>
       </div>
     );
