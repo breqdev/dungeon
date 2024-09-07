@@ -211,14 +211,14 @@ export default function Walk({
               }
               onMouseDown={(e) => {
                 setDragging(true);
-                lastDrag.current = [e.clientX, e.clientY];
+                lastDrag.current = [e.screenX, e.screenY];
               }}
               onTouchStart={(e) => {
                 // prevent "pull down to refresh" behavior
                 e.preventDefault();
 
                 setDragging(true);
-                lastDrag.current = [e.touches[0].clientX, e.touches[0].clientY];
+                lastDrag.current = [e.touches[0].screenX, e.touches[0].screenY];
               }}
               onMouseUp={() => setDragging(false)}
               onTouchEnd={() => setDragging(false)}
@@ -227,10 +227,10 @@ export default function Walk({
               onMouseMove={(e) => {
                 if (dragging && lastDrag.current) {
                   posn.current.x -=
-                    (e.clientX - lastDrag.current[0]) / WINDOW_WIDTH;
+                    (e.screenX - lastDrag.current[0]) / WINDOW_WIDTH;
                   posn.current.y -=
-                    (e.clientY - lastDrag.current[1]) / WINDOW_HEIGHT;
-                  lastDrag.current = [e.clientX, e.clientY];
+                    (e.screenY - lastDrag.current[1]) / WINDOW_HEIGHT;
+                  lastDrag.current = [e.screenX, e.screenY];
                   moveFrames();
                 }
               }}
@@ -240,13 +240,13 @@ export default function Walk({
 
                 if (dragging && lastDrag.current) {
                   posn.current.x -=
-                    (e.touches[0].clientX - lastDrag.current[0]) / WINDOW_WIDTH;
+                    (e.touches[0].screenX - lastDrag.current[0]) / WINDOW_WIDTH;
                   posn.current.y -=
-                    (e.touches[0].clientY - lastDrag.current[1]) /
+                    (e.touches[0].screenY - lastDrag.current[1]) /
                     WINDOW_HEIGHT;
                   lastDrag.current = [
-                    e.touches[0].clientX,
-                    e.touches[0].clientY,
+                    e.touches[0].screenX,
+                    e.touches[0].screenY,
                   ];
                   moveFrames();
                 }
