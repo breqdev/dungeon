@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useLayoutEffect, useRef } from "react";
 import { Graph, Room } from "./types";
 
-const FRAME_SIZE = 750;
+const FRAME_SIZE = 600;
+const WINDOW_SIZE = 800;
 
 export default function Walk({
   rooms,
@@ -26,65 +27,43 @@ export default function Walk({
   }, []);
 
   const moveFrames = useCallback(() => {
-    const x_frac = posn.current.x - Math.floor(posn.current.x);
-    const y_frac = posn.current.y - Math.floor(posn.current.y);
+    // tile frames within the window
+    const min_x = Math.floor(posn.current.x) - 1;
+    const min_y = Math.floor(posn.current.y) - 1;
+    const max_x = Math.ceil(posn.current.x) + 1;
+    const max_y = Math.ceil(posn.current.y) + 1;
 
-    // figure out what 4 frames should be in view
-    const tl =
-      rooms[`${Math.floor(posn.current.x)},${Math.floor(posn.current.y)}`];
-    const tr =
-      rooms[`${Math.floor(posn.current.x) + 1},${Math.floor(posn.current.y)}`];
-    const bl =
-      rooms[`${Math.floor(posn.current.x)},${Math.floor(posn.current.y) + 1}`];
-    const br =
-      rooms[
-        `${Math.floor(posn.current.x) + 1},${Math.floor(posn.current.y) + 1}`
-      ];
+    const in_use = new Set<string>();
 
-    // create iframes if needed
-    if (!frames.current[tl.domain]) {
-      console.log(`Creating frame for ${tl.domain}`);
-      frames.current[tl.domain] = createFrame(tl.domain);
-      parent.current?.appendChild(frames.current[tl.domain]!);
-    }
-    if (!frames.current[tr.domain]) {
-      console.log(`Creating frame for ${tr.domain}`);
-      frames.current[tr.domain] = createFrame(tr.domain);
-      parent.current?.appendChild(frames.current[tr.domain]!);
-    }
-    if (!frames.current[bl.domain]) {
-      console.log(`Creating frame for ${bl.domain}`);
-      frames.current[bl.domain] = createFrame(bl.domain);
-      parent.current?.appendChild(frames.current[bl.domain]!);
-    }
-    if (!frames.current[br.domain]) {
-      console.log(`Creating frame for ${br.domain}`);
-      frames.current[br.domain] = createFrame(br.domain);
-      parent.current?.appendChild(frames.current[br.domain]!);
-    }
+    for (let x = min_x; x <= max_x; x++) {
+      for (let y = min_y; y <= max_y; y++) {
+        const room = rooms[`${x},${y}`];
+        if (!room) {
+          continue;
+        }
 
-    // keep all 4 iframes in view
-    frames.current[tl.domain]!.style.top = 0 - y_frac * FRAME_SIZE + "px";
-    frames.current[tl.domain]!.style.left = 0 - x_frac * FRAME_SIZE + "px";
-    frames.current[tr.domain]!.style.top = 0 - y_frac * FRAME_SIZE + "px";
-    frames.current[tr.domain]!.style.left =
-      FRAME_SIZE - x_frac * FRAME_SIZE + "px";
-    frames.current[bl.domain]!.style.top =
-      FRAME_SIZE - y_frac * FRAME_SIZE + "px";
-    frames.current[bl.domain]!.style.left = 0 - x_frac * FRAME_SIZE + "px";
-    frames.current[br.domain]!.style.top =
-      FRAME_SIZE - y_frac * FRAME_SIZE + "px";
-    frames.current[br.domain]!.style.left =
-      FRAME_SIZE - x_frac * FRAME_SIZE + "px";
+        in_use.add(room.domain);
+
+        if (!frames.current[room.domain]) {
+          console.log(`Creating frame for ${room.domain}`);
+          frames.current[room.domain] = createFrame(room.domain);
+          parent.current?.appendChild(frames.current[room.domain]!);
+        }
+
+        frames.current[room.domain]!.style.top =
+          (WINDOW_SIZE - FRAME_SIZE) / 2 +
+          (y - posn.current.y) * FRAME_SIZE +
+          "px";
+        frames.current[room.domain]!.style.left =
+          (WINDOW_SIZE - FRAME_SIZE) / 2 +
+          (x - posn.current.x) * FRAME_SIZE +
+          "px";
+      }
+    }
 
     // remove frames that are out of view
     for (const key in frames.current) {
-      if (
-        key === tl.domain ||
-        key === tr.domain ||
-        key === bl.domain ||
-        key === br.domain
-      ) {
+      if (in_use.has(key)) {
         continue;
       }
       console.log(`Removing frame for ${key}`);
@@ -126,8 +105,8 @@ export default function Walk({
       <div
         className="relative overflow-hidden"
         style={{
-          width: `${FRAME_SIZE}px`,
-          height: `${FRAME_SIZE}px`,
+          width: `${WINDOW_SIZE}px`,
+          height: `${WINDOW_SIZE}px`,
         }}
         ref={parent}
       >
@@ -144,15 +123,12 @@ export default function Walk({
           }}
           onMouseMove={(e) => {
             if (dragging.current) {
-              posn.current.x -= e.movementX / FRAME_SIZE;
-              posn.current.y -= e.movementY / FRAME_SIZE;
+              posn.current.x -= e.movementX / WINDOW_SIZE;
+              posn.current.y -= e.movementY / WINDOW_SIZE;
               moveFrames();
             }
           }}
         />
-        <p className="absolute bottom-0 left-0 right-0 text-center text-white p-1 text-lg italic">
-          click and drag to move
-        </p>
       </div>
     </div>
   );
