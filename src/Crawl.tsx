@@ -35,10 +35,18 @@ export default function Crawl({
           east: { x: 1, y: 0 },
           south: { x: 0, y: 1 },
           west: { x: -1, y: 0 },
+          northeast: { x: 1, y: -1 },
+          southeast: { x: 1, y: 1 },
+          southwest: { x: -1, y: 1 },
+          northwest: { x: -1, y: -1 },
           n: { x: 0, y: -1 },
           e: { x: 1, y: 0 },
           s: { x: 0, y: 1 },
           w: { x: -1, y: 0 },
+          ne: { x: 1, y: -1 },
+          se: { x: 1, y: 1 },
+          sw: { x: -1, y: 1 },
+          nw: { x: -1, y: -1 },
           up: { x: 0, y: -1 },
           right: { x: 1, y: 0 },
           down: { x: 0, y: 1 },
@@ -59,6 +67,45 @@ export default function Crawl({
           return ["unknown direction: " + args[0]];
         }
       }
+      case "look": {
+        return [
+          "you are located at: " + rooms[`${posn.x},${posn.y}`]?.domain,
+          "you can go: ",
+          ...Object.entries({
+            north: { x: 0, y: -1 },
+            east: { x: 1, y: 0 },
+            south: { x: 0, y: 1 },
+            west: { x: -1, y: 0 },
+          })
+            .map(([dir, { x, y }]) => {
+              const room = rooms[`${posn.x + x},${posn.y + y}`];
+              return room ? `  ${dir} to ${room.domain}` : null;
+            })
+            .filter((x) => x !== null),
+        ];
+      }
+      case "fly": {
+        if (args.length === 0) {
+          return ["fly where?"];
+        }
+
+        const domain = args[0];
+        if (rooms[`${posn.x},${posn.y}`]?.domain === domain) {
+          return ["you are already here."];
+        }
+
+        if (!Object.values(rooms).some((r) => r.domain === domain)) {
+          return ["unknown domain: " + domain];
+        }
+
+        const room = Object.values(rooms).find((r) => r.domain === domain);
+        if (room) {
+          setPosn({ x: room.x, y: room.y });
+          return ["teleported to " + domain];
+        }
+
+        return ["unknown domain: " + domain];
+      }
       case "exit":
         setTimeout(() => goHome(), 500);
         return ["goodbye."];
@@ -66,6 +113,8 @@ export default function Crawl({
         return [
           "available commands:",
           "  > go [dir] - move in a direction",
+          "  > look - look around",
+          "  > fly [domain] - teleport to a domain",
           "  > help - show this help",
           "  > exit - return home",
         ];
@@ -87,7 +136,7 @@ export default function Crawl({
           <iframe
             sandbox="allow-scripts allow-same-origin"
             src={"https://" + rooms[`${posn.x},${posn.y}`]?.domain}
-            className="aspect-[4/3] w-full"
+            className="aspect-[4/3] w-full bg-white"
           />
         </div>
       </div>
