@@ -5,7 +5,7 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 function RoomView({ room, graph }: { room: Room; graph: Graph }) {
   return (
-    <div className="w-32 border-black border-2 flex-shrink-0">
+    <div className="w-32 border-black bg-white border-2 flex-shrink-0">
       <img
         className="w-full"
         style={{ imageRendering: "pixelated" }}

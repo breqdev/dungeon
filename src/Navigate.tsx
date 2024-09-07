@@ -45,14 +45,14 @@ export default function Navigate({
     return () => {
       document.removeEventListener("keydown", handler);
     };
-  }, [posn]);
+  }, [posn, rooms]);
 
   return (
     <div className="h-screen flex flex-col bg-gray-600">
       <div className="flex flex-row gap-2 justify-center p-4">
         <a
           href={`https://${rooms[`${posn.x},${posn.y}`]?.domain}`}
-          className="aspect-[88/31]"
+          className="aspect-[88/31] flex-shrink-0"
         >
           {...[
             <img

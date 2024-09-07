@@ -81,7 +81,7 @@ export default function App() {
     );
   } else {
     return (
-      <div className="h-screen flex flex-col justify-center items-center bg-gray-600 text-white text-center gap-2">
+      <div className="min-h-screen p-4 flex flex-col justify-center items-center bg-gray-600 text-white text-center gap-2">
         <h2 className="py-2 text-3xl">choose your adventure</h2>
         <ViewButton
           view="birdsEye"
