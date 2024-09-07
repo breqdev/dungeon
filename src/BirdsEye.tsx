@@ -1,3 +1,4 @@
+import { useLayoutEffect, useMemo } from "react";
 import { Graph, Room } from "./types";
 
 function RoomView({ room, graph }: { room: Room; graph: Graph }) {
@@ -22,12 +23,35 @@ export default function BirdsEye({
   rooms: Record<string, Room>;
   graph: Graph;
 }) {
-  console.log(rooms);
+  const min_x = useMemo(
+    () => Math.min(...Object.values(rooms).map((r: Room) => r.x)),
+    [rooms]
+  );
+  const max_x = useMemo(
+    () => Math.max(...Object.values(rooms).map((r: Room) => r.x)),
+    [rooms]
+  );
+  const min_y = useMemo(
+    () => Math.min(...Object.values(rooms).map((r: Room) => r.y)),
+    [rooms]
+  );
+  const max_y = useMemo(
+    () => Math.max(...Object.values(rooms).map((r: Room) => r.y)),
+    [rooms]
+  );
 
-  const min_x = Math.min(...Object.values(rooms).map((r: Room) => r.x));
-  const max_x = Math.max(...Object.values(rooms).map((r: Room) => r.x));
-  const min_y = Math.min(...Object.values(rooms).map((r: Room) => r.y));
-  const max_y = Math.max(...Object.values(rooms).map((r: Room) => r.y));
+  useLayoutEffect(() => {
+    // compute the position of room 0,0
+    const x = -min_x * 128; // w-32
+    const y = -min_y * 128;
+
+    // compensate for the size of the viewport
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+
+    // scroll to that position
+    window.scrollTo(x - w / 2 + 64, y - h / 2 + 64);
+  }, [min_x, min_y]);
 
   return (
     <div className="flex flex-col">
