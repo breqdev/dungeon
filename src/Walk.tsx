@@ -1,14 +1,28 @@
-import { useCallback, useEffect, useLayoutEffect, useRef } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { Graph, Room } from "./types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowLeft,
+  faArrowPointer,
+  faArrowsUpDownLeftRight,
+} from "@fortawesome/free-solid-svg-icons";
 
 const FRAME_SIZE = 600;
 const WINDOW_SIZE = 800;
 
 export default function Walk({
   rooms,
+  goHome,
 }: {
   rooms: Record<string, Room>;
   graph: Graph;
+  goHome: () => void;
 }) {
   const posn = useRef({ x: 0, y: 0 });
 
@@ -24,6 +38,8 @@ export default function Walk({
 
     const newFrame = document.createElement("iframe");
     newFrame.src = "https://" + src;
+    newFrame.sandbox.add("allow-scripts");
+    newFrame.sandbox.add("allow-same-origin");
     newFrame.style.backgroundColor = "white";
     newFrame.style.width = "100%";
     newFrame.style.height = "100%";
@@ -105,38 +121,76 @@ export default function Walk({
     moveFrames();
   }, [createFrame, moveFrames]);
 
-  const dragging = useRef(false);
+  const [dragging, setDragging] = useState(false);
+  const [mode, setMode] = useState<"move" | "interact">("move");
 
   return (
     <div className="grid place-items-center h-screen w-full bg-gray-600">
-      <div className="border-[16px] border-black rounded-2xl">
-        <div
-          className="relative overflow-hidden"
-          style={{
-            width: `${WINDOW_SIZE}px`,
-            height: `${WINDOW_SIZE}px`,
-          }}
-          ref={parent}
-        >
+      <div className="flex flex-row gap-2">
+        <div className="flex flex-col w-16 gap-2">
+          <button
+            className="bg-black text-white h-16 w-16 rounded-xl text-2xl"
+            onClick={goHome}
+          >
+            <FontAwesomeIcon icon={faArrowLeft} />
+          </button>
+          <button
+            className={
+              "h-16 w-16 rounded-xl text-2xl " +
+              (mode === "move" ? "bg-white text-black" : "bg-black text-white")
+            }
+            onClick={() => setMode("move")}
+          >
+            <FontAwesomeIcon icon={faArrowsUpDownLeftRight} />
+          </button>
+          <button
+            className={
+              "h-16 w-16 rounded-xl text-2xl " +
+              (mode === "interact"
+                ? "bg-white text-black"
+                : "bg-black text-white")
+            }
+            onClick={() => setMode("interact")}
+          >
+            <FontAwesomeIcon icon={faArrowPointer} />
+          </button>
+        </div>
+        <div className="border-[16px] border-black rounded-2xl">
           <div
-            className="absolute inset-0 z-10"
-            onMouseDown={() => {
-              dragging.current = true;
+            className="relative overflow-hidden"
+            style={{
+              width: `${WINDOW_SIZE}px`,
+              height: `${WINDOW_SIZE}px`,
             }}
-            onMouseUp={() => {
-              dragging.current = false;
-            }}
-            onMouseOut={() => {
-              dragging.current = false;
-            }}
-            onMouseMove={(e) => {
-              if (dragging.current) {
-                posn.current.x -= e.movementX / WINDOW_SIZE;
-                posn.current.y -= e.movementY / WINDOW_SIZE;
-                moveFrames();
+            ref={parent}
+          >
+            <div
+              className={
+                "absolute inset-0 z-10 " +
+                (mode === "move"
+                  ? dragging
+                    ? "cursor-grabbing"
+                    : "cursor-grab"
+                  : "pointer-events-none")
               }
-            }}
-          />
+              onMouseDown={() => {
+                setDragging(true);
+              }}
+              onMouseUp={() => {
+                setDragging(false);
+              }}
+              onMouseOut={() => {
+                setDragging(false);
+              }}
+              onMouseMove={(e) => {
+                if (dragging) {
+                  posn.current.x -= e.movementX / WINDOW_SIZE;
+                  posn.current.y -= e.movementY / WINDOW_SIZE;
+                  moveFrames();
+                }
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>

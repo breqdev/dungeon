@@ -3,9 +3,11 @@ import { Graph, Room } from "./types";
 
 export default function Crawl({
   rooms,
+  goHome,
 }: {
   rooms: Record<string, Room>;
   graph: Graph;
+  goHome: () => void;
 }) {
   const [posn, setPosn] = useState({ x: 0, y: 0 });
 
@@ -57,22 +59,33 @@ export default function Crawl({
           return ["unknown direction: " + args[0]];
         }
       }
+      case "exit":
+        setTimeout(() => goHome(), 500);
+        return ["goodbye."];
       case "help":
         return [
           "available commands:",
           "  > go [dir] - move in a direction",
           "  > help - show this help",
+          "  > exit - return home",
         ];
       default:
         return ["unknown command: " + cmd];
     }
   }
 
+  const input = useRef<HTMLInputElement>(null);
+
+  useLayoutEffect(() => {
+    input.current?.focus();
+  }, []);
+
   return (
     <div className="h-screen flex flex-col bg-gray-600">
       <div className="flex-grow grid place-items-center">
         <div className="w-full max-w-3xl border-[16px] border-gray-900 rounded-2xl">
           <iframe
+            sandbox="allow-scripts allow-same-origin"
             src={"https://" + rooms[`${posn.x},${posn.y}`]?.domain}
             className="aspect-[4/3] w-full"
           />
@@ -80,7 +93,7 @@ export default function Crawl({
       </div>
 
       <div className="flex flex-row justify-center p-4">
-        <div className="font-mono bg-gray-900 text-green-300 max-w-3xl w-full h-48 p-4 flex flex-col">
+        <div className="font-mono bg-gray-900 text-green-300 max-w-3xl w-full h-64 p-4 flex flex-col">
           <div className="overflow-y-auto flex flex-col" ref={history}>
             {term.history.map((t, i) => (
               <span className="whitespace-pre" key={i}>
@@ -97,6 +110,7 @@ export default function Crawl({
               onChange={(e) =>
                 setTerm({ history: term.history, current: e.target.value })
               }
+              ref={input}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   setTerm({
