@@ -23,24 +23,42 @@ function ViewButton({
   setView,
   icon,
   children,
+  desktopOnly,
 }: {
   view: View;
   label: string;
   setView: (v: View) => void;
   icon: IconDefinition;
   children: ReactNode;
+  desktopOnly?: boolean;
 }) {
   return (
-    <button
-      className="bg-black text-white p-4 rounded-xl w-full max-w-lg flex flex-row text-left gap-6"
-      onClick={() => setView(view)}
-    >
-      <FontAwesomeIcon icon={icon} className="text-5xl aspect-square" />
-      <div className="flex flex-col">
-        <h2 className="text-2xl">{label}</h2>
-        <p>{children}</p>
-      </div>
-    </button>
+    <>
+      <button
+        className={
+          "bg-black text-white p-4 rounded-xl w-full max-w-lg flex-row text-left gap-6 " +
+          (desktopOnly ? "hidden lg:flex" : "flex")
+        }
+        onClick={() => setView(view)}
+      >
+        <FontAwesomeIcon icon={icon} className="text-5xl aspect-square" />
+        <div className="flex flex-col">
+          <h2 className="text-2xl">{label}</h2>
+          <p>{children}</p>
+        </div>
+      </button>
+      {desktopOnly && (
+        <div className="bg-gray-400 text-white p-4 rounded-xl w-full max-w-lg flex-row text-left gap-6 flex lg:hidden">
+          <FontAwesomeIcon icon={icon} className="text-5xl aspect-square" />
+          <div className="flex flex-col">
+            <h2 className="text-2xl">{label}</h2>
+            <p className="italic">
+              This experience is only available on desktop browsers.
+            </p>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -112,6 +130,7 @@ export default function App() {
           setView={setView}
           label="Crawl"
           icon={faTerminal}
+          desktopOnly
         >
           A "dungeon crawl" style text-based adventure.
         </ViewButton>

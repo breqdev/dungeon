@@ -180,7 +180,7 @@ export default function Walk({
   const [mode, setMode] = useState<"move" | "interact">("move");
 
   return (
-    <div className="grid place-items-center h-screen w-full bg-gray-600">
+    <div className="grid place-items-center h-[calc(100dvh)] overflow-hidden w-full bg-gray-600">
       <div className="flex flex-col lg:flex-row-reverse gap-2">
         <div className="border-[16px] border-black rounded-2xl">
           <div

@@ -155,7 +155,7 @@ export default function Navigate({
           <FontAwesomeIcon icon={faHome} />
         </button>
         <button
-          className="bg-black text-white flex flex-col justify-center w-16 h-16 rounded-xl text-4xl"
+          className="bg-black text-white h-16 w-16 rounded-xl text-2xl"
           onClick={() => setPosn({ x: posn.x, y: posn.y - 1 })}
           disabled={!rooms[`${posn.x},${posn.y - 1}`]}
         >
@@ -171,7 +171,7 @@ export default function Navigate({
         </a>
 
         <button
-          className="bg-black text-white flex flex-col justify-center w-16 h-16 rounded-xl text-4xl"
+          className="bg-black text-white h-16 w-16 rounded-xl text-2xl"
           onClick={() => setPosn({ x: posn.x - 1, y: posn.y })}
           disabled={!rooms[`${posn.x - 1},${posn.y}`]}
         >
@@ -179,14 +179,14 @@ export default function Navigate({
         </button>
 
         <button
-          className="bg-black text-white flex flex-col justify-center w-16 h-16 rounded-xl text-4xl"
+          className="bg-black text-white h-16 w-16 rounded-xl text-2xl"
           onClick={() => setPosn({ x: posn.x, y: posn.y + 1 })}
           disabled={!rooms[`${posn.x},${posn.y + 1}`]}
         >
           <FontAwesomeIcon icon={faArrowDown} />
         </button>
         <button
-          className="bg-black text-white flex flex-col justify-center w-16 h-16 rounded-xl text-4xl"
+          className="bg-black text-white h-16 w-16 rounded-xl text-2xl"
           onClick={() => setPosn({ x: posn.x + 1, y: posn.y })}
           disabled={!rooms[`${posn.x + 1},${posn.y}`]}
         >
