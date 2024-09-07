@@ -49,10 +49,10 @@ export default function Navigate({
 
   return (
     <div className="h-screen flex flex-col bg-gray-600">
-      <div className="flex flex-row gap-2 justify-center p-4">
+      <div className="flex-row gap-2 justify-center p-4 hidden md:flex">
         <a
           href={`https://${rooms[`${posn.x},${posn.y}`]?.domain}`}
-          className="aspect-[88/31] flex-shrink-0"
+          className="hidden lg:block aspect-[88/31] flex-shrink-0"
         >
           {...[
             <img
@@ -125,11 +125,59 @@ export default function Navigate({
           </span>
         </button>
       </div>
+
       <iframe
         sandbox="allow-scripts allow-same-origin"
         src={"https://" + rooms[`${posn.x},${posn.y}`]?.domain}
-        className="w-full flex-grow"
+        className="w-full flex-grow bg-white"
       />
+
+      <div className="grid grid-cols-[max-content,max-content,max-content] place-content-center gap-2 p-4 md:hidden">
+        <button
+          className="bg-black text-white h-16 w-16 rounded-xl text-2xl"
+          onClick={goHome}
+        >
+          <FontAwesomeIcon icon={faHome} />
+        </button>
+        <button
+          className="bg-black text-white flex flex-col justify-center w-16 h-16 rounded-xl text-4xl"
+          onClick={() => setPosn({ x: posn.x, y: posn.y - 1 })}
+          disabled={!rooms[`${posn.x},${posn.y - 1}`]}
+        >
+          ↑
+        </button>
+        <a
+          className="bg-black text-white h-16 w-16 rounded-xl text-2xl grid place-items-center"
+          href={`https://${rooms[`${posn.x},${posn.y}`]?.domain}`}
+          rel="noreferrer"
+          target="_blank"
+        >
+          <FontAwesomeIcon icon={faExternalLink} />
+        </a>
+
+        <button
+          className="bg-black text-white flex flex-col justify-center w-16 h-16 rounded-xl text-4xl"
+          onClick={() => setPosn({ x: posn.x - 1, y: posn.y })}
+          disabled={!rooms[`${posn.x - 1},${posn.y}`]}
+        >
+          ←
+        </button>
+
+        <button
+          className="bg-black text-white flex flex-col justify-center w-16 h-16 rounded-xl text-4xl"
+          onClick={() => setPosn({ x: posn.x, y: posn.y + 1 })}
+          disabled={!rooms[`${posn.x},${posn.y + 1}`]}
+        >
+          ↓
+        </button>
+        <button
+          className="bg-black text-white flex flex-col justify-center w-16 h-16 rounded-xl text-4xl"
+          onClick={() => setPosn({ x: posn.x + 1, y: posn.y })}
+          disabled={!rooms[`${posn.x + 1},${posn.y}`]}
+        >
+          →
+        </button>
+      </div>
     </div>
   );
 }
