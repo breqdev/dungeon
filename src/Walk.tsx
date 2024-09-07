@@ -1,11 +1,10 @@
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef } from "react";
 import { Graph, Room } from "./types";
 
 const FRAME_SIZE = 750;
 
 export default function Walk({
   rooms,
-  graph,
 }: {
   rooms: Record<string, Room>;
   graph: Graph;
@@ -17,7 +16,7 @@ export default function Walk({
   const bl = useRef<HTMLIFrameElement>(null);
   const br = useRef<HTMLIFrameElement>(null);
 
-  function moveFrames() {
+  const moveFrames = useCallback(() => {
     const x_frac = posn.current.x - Math.floor(posn.current.x);
     const y_frac = posn.current.y - Math.floor(posn.current.y);
 
@@ -63,10 +62,10 @@ export default function Walk({
           `${Math.floor(posn.current.x) + 1},${Math.floor(posn.current.y) + 1}`
         ]?.domain
     );
-  }
+  }, [rooms]);
 
   useEffect(() => {
-    const handler = (e) => {
+    const handler = (e: KeyboardEvent) => {
       if (e.key === "ArrowUp") {
         posn.current.y -= 0.1;
       } else if (e.key === "ArrowDown") {
@@ -89,7 +88,7 @@ export default function Walk({
 
   useLayoutEffect(() => {
     moveFrames();
-  }, []);
+  }, [moveFrames]);
 
   const dragging = useRef(false);
 

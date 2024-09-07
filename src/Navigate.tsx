@@ -3,7 +3,6 @@ import { Graph, Room } from "./types";
 
 export default function Navigate({
   rooms,
-  graph,
 }: {
   rooms: Record<string, Room>;
   graph: Graph;
