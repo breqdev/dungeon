@@ -71,7 +71,7 @@ export default function Crawl({
   return (
     <div className="h-screen flex flex-col bg-gray-600">
       <div className="flex-grow grid place-items-center">
-        <div className="w-full max-w-3xl border-[16px] border-black rounded-2xl">
+        <div className="w-full max-w-3xl border-[16px] border-gray-900 rounded-2xl">
           <iframe
             src={"https://" + rooms[`${posn.x},${posn.y}`]?.domain}
             className="aspect-[4/3] w-full"
@@ -80,7 +80,7 @@ export default function Crawl({
       </div>
 
       <div className="flex flex-row justify-center p-4">
-        <div className="font-mono bg-black text-green-300 max-w-3xl w-full h-48 p-4 flex flex-col">
+        <div className="font-mono bg-gray-900 text-green-300 max-w-3xl w-full h-48 p-4 flex flex-col">
           <div className="overflow-y-auto flex flex-col" ref={history}>
             {term.history.map((t, i) => (
               <span className="whitespace-pre" key={i}>
@@ -92,7 +92,7 @@ export default function Crawl({
             <span className="whitespace-pre">{"> "}</span>
             <input
               type="text"
-              className="outline-none bg-black flex-grow"
+              className="outline-none bg-transparent flex-grow"
               value={term.current}
               onChange={(e) =>
                 setTerm({ history: term.history, current: e.target.value })
