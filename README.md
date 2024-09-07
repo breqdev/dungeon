@@ -2,8 +2,6 @@
 
 This project is hosted at [dungeon.breq.dev](https://dungeon.breq.dev/).
 
-Developing:
-
 - `npm install`
 - `npx tsx graphToRooms.ts` to regenerate the `rooms.json` file
 - `npm run dev` to serve the frontend
