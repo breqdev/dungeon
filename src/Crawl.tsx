@@ -71,7 +71,7 @@ export default function Crawl({
   return (
     <div className="h-screen flex flex-col bg-gray-600">
       <div className="flex-grow grid place-items-center">
-        <div className="w-full max-w-3xl border-8 border-black">
+        <div className="w-full max-w-3xl border-[16px] border-black rounded-2xl">
           <iframe
             src={"https://" + rooms[`${posn.x},${posn.y}`]?.domain}
             className="aspect-[4/3] w-full"
