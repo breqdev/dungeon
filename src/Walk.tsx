@@ -223,6 +223,9 @@ export default function Walk({
                 }
               }}
               onTouchMove={(e) => {
+                // prevent "pull down to refresh" behavior
+                e.preventDefault();
+
                 if (dragging && lastDrag.current) {
                   posn.current.x -=
                     (e.touches[0].clientX - lastDrag.current[0]) / WINDOW_WIDTH;
