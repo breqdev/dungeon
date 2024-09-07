@@ -13,17 +13,24 @@ export default function Walk({
   const posn = useRef({ x: 0, y: 0 });
 
   const parent = useRef<HTMLDivElement>(null);
-  const frames = useRef<Record<string, HTMLIFrameElement | null>>({});
+  const frames = useRef<Record<string, HTMLElement | null>>({});
 
   const createFrame = useCallback((src: string) => {
+    const wrapper = document.createElement("div");
+    wrapper.style.width = `${FRAME_SIZE}px`;
+    wrapper.style.height = `${FRAME_SIZE}px`;
+    wrapper.style.position = "absolute";
+    wrapper.style.border = "8px #111827 solid";
+
     const newFrame = document.createElement("iframe");
     newFrame.src = "https://" + src;
-    newFrame.style.width = `${FRAME_SIZE}px`;
-    newFrame.style.height = `${FRAME_SIZE}px`;
-    newFrame.style.position = "absolute";
-    newFrame.style.border = "8px black";
     newFrame.style.backgroundColor = "white";
-    return newFrame;
+    newFrame.style.width = "100%";
+    newFrame.style.height = "100%";
+    newFrame.style.border = "none";
+
+    wrapper.appendChild(newFrame);
+    return wrapper;
   }, []);
 
   const moveFrames = useCallback(() => {
@@ -102,33 +109,35 @@ export default function Walk({
 
   return (
     <div className="grid place-items-center h-screen w-full bg-gray-600">
-      <div
-        className="relative overflow-hidden"
-        style={{
-          width: `${WINDOW_SIZE}px`,
-          height: `${WINDOW_SIZE}px`,
-        }}
-        ref={parent}
-      >
+      <div className="border-[16px] border-black rounded-2xl">
         <div
-          className="absolute inset-0 border-2 border-black z-10"
-          onMouseDown={() => {
-            dragging.current = true;
+          className="relative overflow-hidden"
+          style={{
+            width: `${WINDOW_SIZE}px`,
+            height: `${WINDOW_SIZE}px`,
           }}
-          onMouseUp={() => {
-            dragging.current = false;
-          }}
-          onMouseOut={() => {
-            dragging.current = false;
-          }}
-          onMouseMove={(e) => {
-            if (dragging.current) {
-              posn.current.x -= e.movementX / WINDOW_SIZE;
-              posn.current.y -= e.movementY / WINDOW_SIZE;
-              moveFrames();
-            }
-          }}
-        />
+          ref={parent}
+        >
+          <div
+            className="absolute inset-0 z-10"
+            onMouseDown={() => {
+              dragging.current = true;
+            }}
+            onMouseUp={() => {
+              dragging.current = false;
+            }}
+            onMouseOut={() => {
+              dragging.current = false;
+            }}
+            onMouseMove={(e) => {
+              if (dragging.current) {
+                posn.current.x -= e.movementX / WINDOW_SIZE;
+                posn.current.y -= e.movementY / WINDOW_SIZE;
+                moveFrames();
+              }
+            }}
+          />
+        </div>
       </div>
     </div>
   );
