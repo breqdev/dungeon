@@ -21,6 +21,15 @@ export default function Walk({
   graph: Graph;
   goHome: () => void;
 }) {
+  useLayoutEffect(() => {
+    // prevent pull to refresh on mobile
+    document.body.style.overscrollBehaviorY = "contain";
+
+    return () => {
+      document.body.style.overscrollBehaviorY = "auto";
+    };
+  }, []);
+
   const getWindowSize = useCallback(() => {
     if (window.innerWidth < 768) {
       // try to fill a mobile viewport
