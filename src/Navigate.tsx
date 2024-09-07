@@ -1,7 +1,14 @@
 import { useEffect, useState } from "react";
 import { Graph, Room } from "./types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faExternalLink, faHome } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowDown,
+  faArrowLeft,
+  faArrowRight,
+  faArrowUp,
+  faExternalLink,
+  faHome,
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function Navigate({
   rooms,
@@ -48,7 +55,7 @@ export default function Navigate({
   }, [posn, rooms]);
 
   return (
-    <div className="h-screen flex flex-col bg-gray-600">
+    <div className="h-[calc(100dvh)] flex flex-col bg-gray-600">
       <div className="flex-row gap-2 justify-center p-4 hidden md:flex">
         <a
           href={`https://${rooms[`${posn.x},${posn.y}`]?.domain}`}
@@ -85,41 +92,49 @@ export default function Navigate({
         </div>
 
         <button
-          className="bg-black text-white flex flex-col justify-center w-64 h-32 rounded-xl"
+          className="bg-black text-white flex flex-col gap-2 justify-center w-64 h-32 rounded-xl"
           onClick={() => setPosn({ x: posn.x - 1, y: posn.y })}
           disabled={!rooms[`${posn.x - 1},${posn.y}`]}
         >
-          <span className="text-7xl">←</span>
+          <span className="text-5xl pt-3">
+            <FontAwesomeIcon icon={faArrowLeft} />
+          </span>
           <span className="text-sm">
             {rooms[`${posn.x - 1},${posn.y}`]?.domain}
           </span>
         </button>
         <button
-          className="bg-black text-white flex flex-col justify-center w-64 h-32 rounded-xl"
+          className="bg-black text-white flex flex-col gap-2 justify-center w-64 h-32 rounded-xl"
           onClick={() => setPosn({ x: posn.x, y: posn.y - 1 })}
           disabled={!rooms[`${posn.x},${posn.y - 1}`]}
         >
-          <span className="text-7xl">↑</span>
+          <span className="text-5xl pt-3">
+            <FontAwesomeIcon icon={faArrowUp} />
+          </span>
           <span className="text-sm">
             {rooms[`${posn.x},${posn.y - 1}`]?.domain}
           </span>
         </button>
         <button
-          className="bg-black text-white flex flex-col justify-center w-64 h-32 rounded-xl"
+          className="bg-black text-white flex flex-col gap-2 justify-center w-64 h-32 rounded-xl"
           onClick={() => setPosn({ x: posn.x, y: posn.y + 1 })}
           disabled={!rooms[`${posn.x},${posn.y + 1}`]}
         >
-          <span className="text-7xl">↓</span>
+          <span className="text-5xl pt-3">
+            <FontAwesomeIcon icon={faArrowDown} />
+          </span>
           <span className="text-sm">
             {rooms[`${posn.x},${posn.y + 1}`]?.domain}
           </span>
         </button>
         <button
-          className="bg-black text-white flex flex-col justify-center w-64 h-32 rounded-xl"
+          className="bg-black text-white flex flex-col gap-2 justify-center w-64 h-32 rounded-xl"
           onClick={() => setPosn({ x: posn.x + 1, y: posn.y })}
           disabled={!rooms[`${posn.x + 1},${posn.y}`]}
         >
-          <span className="text-7xl">→</span>
+          <span className="text-5xl pt-3">
+            <FontAwesomeIcon icon={faArrowRight} />
+          </span>
           <span className="text-sm">
             {rooms[`${posn.x + 1},${posn.y}`]?.domain}
           </span>
@@ -144,7 +159,7 @@ export default function Navigate({
           onClick={() => setPosn({ x: posn.x, y: posn.y - 1 })}
           disabled={!rooms[`${posn.x},${posn.y - 1}`]}
         >
-          ↑
+          <FontAwesomeIcon icon={faArrowUp} />
         </button>
         <a
           className="bg-black text-white h-16 w-16 rounded-xl text-2xl grid place-items-center"
@@ -160,7 +175,7 @@ export default function Navigate({
           onClick={() => setPosn({ x: posn.x - 1, y: posn.y })}
           disabled={!rooms[`${posn.x - 1},${posn.y}`]}
         >
-          ←
+          <FontAwesomeIcon icon={faArrowLeft} />
         </button>
 
         <button
@@ -168,14 +183,14 @@ export default function Navigate({
           onClick={() => setPosn({ x: posn.x, y: posn.y + 1 })}
           disabled={!rooms[`${posn.x},${posn.y + 1}`]}
         >
-          ↓
+          <FontAwesomeIcon icon={faArrowDown} />
         </button>
         <button
           className="bg-black text-white flex flex-col justify-center w-16 h-16 rounded-xl text-4xl"
           onClick={() => setPosn({ x: posn.x + 1, y: posn.y })}
           disabled={!rooms[`${posn.x + 1},${posn.y}`]}
         >
-          →
+          <FontAwesomeIcon icon={faArrowRight} />
         </button>
       </div>
     </div>
