@@ -205,6 +205,9 @@ export default function Walk({
                 lastDrag.current = [e.clientX, e.clientY];
               }}
               onTouchStart={(e) => {
+                // prevent "pull down to refresh" behavior
+                e.preventDefault();
+
                 setDragging(true);
                 lastDrag.current = [e.touches[0].clientX, e.touches[0].clientY];
               }}
