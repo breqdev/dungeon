@@ -101,7 +101,7 @@ export default function App() {
   } else {
     return (
       <div className="min-h-screen p-4 flex flex-col justify-center items-center bg-gray-600 text-white text-center gap-2">
-        <img src={icon} className="w-48" />
+        <img src={icon} className="w-48 h-48" />
         <h2 className="pb-6 -mt-2 text-3xl">choose your adventure</h2>
         <ViewButton
           view="birdsEye"
