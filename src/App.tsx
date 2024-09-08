@@ -139,7 +139,12 @@ export default function App() {
 
         <div className="pt-16 flex flex-col gap-2 max-w-xl">
           <p>
-            88x31 dungeon is a project by{" "}
+            <img
+              className="inline"
+              style={{ imageRendering: "pixelated" }}
+              src="/88x31.png"
+            />{" "}
+            is a project by{" "}
             <a href="https://breq.dev/">
               <img
                 className="inline"
