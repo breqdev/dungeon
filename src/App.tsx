@@ -173,6 +173,7 @@ export default function App() {
             </a>
             , and pull requests are welcome.
           </p>
+          <p>data last updated September 9, 2024.</p>
         </div>
       </div>
     );
